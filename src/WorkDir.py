@@ -1,4 +1,4 @@
-from os import listdir
+from os import listdir, walk
 from os.path import isfile, join, getsize
 import numpy as np 
 
@@ -8,11 +8,15 @@ class WorkDir:
         self.filePaths, self.fileSizes, self.filesInfo = self.getFilesInfo()
 
     def getFilePaths(self):
-        fileNames = [f for f in listdir(self.path) if isfile(join(self.path, f))]
         filePaths = np.array([])
+        for root, dirs, files in walk(self.path):
+            for file in files:
+                filePaths = np.append(filePaths,join(root,file))
+        # fileNames = [f for f in listdir(self.path) if isfile(join(self.path, f))]
+        # filePaths = np.array([])
 
-        for fileName in fileNames:
-            filePaths = np.append(filePaths,join(self.path, fileName))
+        # for fileName in fileNames:
+        #     filePaths = np.append(filePaths,join(self.path, fileName))
         return filePaths
     
     def getFileSizes(self):
